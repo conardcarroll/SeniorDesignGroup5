@@ -1,1 +1,0 @@
-c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurityContent\obj\Xbox 360\Debug\KinectSecurityContent.contentprojResolveAssemblyReference.cache

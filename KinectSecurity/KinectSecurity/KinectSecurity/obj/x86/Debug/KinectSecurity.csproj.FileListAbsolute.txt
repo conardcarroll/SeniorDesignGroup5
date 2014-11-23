@@ -1,6 +1,0 @@
-c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\bin\x86\Debug\KinectSecurity.exe
-c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\bin\x86\Debug\KinectSecurity.pdb
-c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\obj\x86\Debug\KinectSecurity.csprojResolveAssemblyReference.cache
-c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
-c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\obj\x86\Debug\KinectSecurity.exe
-c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\obj\x86\Debug\KinectSecurity.pdb
