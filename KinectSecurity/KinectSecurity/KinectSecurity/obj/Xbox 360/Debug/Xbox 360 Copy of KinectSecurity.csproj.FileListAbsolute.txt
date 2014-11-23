@@ -1,0 +1,5 @@
+c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\bin\Xbox 360\Debug\KinectSecurity.exe
+c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\bin\Xbox 360\Debug\KinectSecurity.pdb
+c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\obj\Xbox 360\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\obj\Xbox 360\Debug\KinectSecurity.exe
+c:\users\kelly\documents\visual studio 2010\Projects\KinectSecurity\KinectSecurity\KinectSecurity\obj\Xbox 360\Debug\KinectSecurity.pdb
