@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Sacknet.KinectFacialRecognition
 {
@@ -45,6 +46,7 @@ namespace Sacknet.KinectFacialRecognition
             this.AverageImage = averageImage;
             this.Labels = targetFaces.Select(x => x.Key).ToArray();
             this.EigenDistanceThreshold = eigenDistanceThreshold;
+
         }
 
         /// <summary>

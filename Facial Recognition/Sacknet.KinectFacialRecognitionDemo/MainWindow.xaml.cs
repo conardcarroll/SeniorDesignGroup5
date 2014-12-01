@@ -214,6 +214,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
                    
                 }
 
+                if (this.targetFaces.Count > 1)
+                    this.engine.SetTargetFaces(this.targetFaces);
+
                 FirstLoad = true;
             }
             else
