@@ -106,7 +106,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                     using (var g = Graphics.FromImage(e.ProcessedBitmap))
                     {
                         var rect = face.TrackingResults.FaceRect;
-                        g.DrawString(face.Key, new Font("Arial", 20), Brushes.Red, new System.Drawing.Point(rect.Left, rect.Top - 25));
+                        g.DrawString(face.Key, new Font("Arial", 20), Brushes.Pink, new System.Drawing.Point(rect.Left, rect.Top - 25));
 
                     }
 
