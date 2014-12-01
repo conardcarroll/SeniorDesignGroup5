@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Kinect;
 using Sacknet.KinectFacialRecognition;
+using System.IO;
 
 namespace Sacknet.KinectFacialRecognitionDemo
 {
@@ -18,7 +19,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
     public partial class MainWindow : Window
     {
         private bool takeTrainingImage = false;
-        private bool initialLoad = false;
+        private bool FirstLoad = false;
         private KinectFacialRecognitionEngine engine;
         private ObservableCollection<TargetFace> targetFaces = new ObservableCollection<TargetFace>();
 
@@ -120,12 +121,12 @@ namespace Sacknet.KinectFacialRecognitionDemo
                         Key = this.NameField.Text
                     });
 
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Jason\Desktop\Faces\FaceKey.txt", true))
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"FaceDB\FaceKeys.txt", true))
                     {
-                        file.WriteLine(this.NameField.Text + "\n");
+                        file.Write(this.NameField.Text + ",");
                     }
 
-                    face.GrayFace.Save("C:/Users/Jason/Desktop/Faces/" + this.NameField.Text + ".bmp");
+                    face.GrayFace.Save(@"FaceDB/" + this.NameField.Text + ".bmp");
 
                     this.takeTrainingImage = false;
                     this.NameField.Text = this.NameField.Text.Replace(this.targetFaces.Count.ToString(), (this.targetFaces.Count + 1).ToString());
@@ -181,9 +182,44 @@ namespace Sacknet.KinectFacialRecognitionDemo
             }
         }
 
-        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        private void LoadFaces(object sender, RoutedEventArgs e)
         {
+            if (FirstLoad == false)
+            {
+                System.IO.StreamReader FaceKeys = new System.IO.StreamReader(@"FaceDB/FaceKeys.txt");
+                string KeyStr, subKey;
+                int counter = 0;
 
+                KeyStr = FaceKeys.ReadToEnd();
+                subKey = KeyStr.Split(',')[counter];
+
+                while (!String.IsNullOrEmpty(subKey))
+                {
+                    try
+                    {
+                        this.targetFaces.Add(new BitmapSourceTargetFace
+                        {
+                            Image = new Bitmap(@"FaceDB/" + subKey + ".bmp"),
+                            Key = subKey
+                        });
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Could not load " + subKey + ".bmp");
+                    }
+
+                    counter = counter + 1;
+                    subKey = KeyStr.Split(',').ElementAtOrDefault(counter);
+                    
+                   
+                }
+
+                FirstLoad = true;
+            }
+            else
+            {
+                MessageBox.Show("Faces Already Loaded");
+            }
         }
     }
 }
