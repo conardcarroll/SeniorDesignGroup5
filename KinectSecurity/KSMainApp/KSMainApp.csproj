@@ -115,9 +115,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sacknet.KinectFacialRecognition\Sacknet.KinectFacialRecognition.csproj">
+    <ProjectReference Include="..\KSFacialRecognitionEngine\KSFacialRecognitionEngine.csproj">
       <Project>{d10c23ec-ab96-4103-9d53-0c2089a3bcfb}</Project>
-      <Name>Sacknet.KinectFacialRecognition</Name>
+      <Name>KSFacialRecognitionEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
