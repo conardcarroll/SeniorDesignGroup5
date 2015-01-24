@@ -12,6 +12,7 @@ using Sacknet.KinectFacialRecognition;
 using System.IO;
 using System.Data.SqlClient;
 using System.Net.Mail;
+using System.Data.SqlTypes;
 
 namespace Sacknet.KinectFacialRecognitionDemo
 {
@@ -31,6 +32,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private string emailUsername = "KinectSystemAlert@gmail.com";
         private string emailPassword = "seniordesign";
         private Int32 portNum = 587;
+
+
+        private SqlConnection cnn;
 
 
         /// <summary>
@@ -76,7 +80,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string connetionString = null;
-            SqlConnection cnn;
+            
             connetionString = "Data Source=kinectdb.cljct8cmess5.us-west-2.rds.amazonaws.com,1433;Initial Catalog=Security_Database;User ID=Group5;Password=Admin2015";
             cnn = new SqlConnection(connetionString);
             try
@@ -149,12 +153,31 @@ namespace Sacknet.KinectFacialRecognitionDemo
                         Key = this.NameField.Text
                     });
 
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"FaceDB\FaceKeys.txt", true))
+                    //using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"FaceDB\FaceKeys.txt", true))
+                    //{
+                    //    file.Write(this.NameField.Text + ",");
+                    //}
                     {
-                        file.Write(this.NameField.Text + ",");
+                        int step = 0;
+                        byte[] imageBytes = face.GrayFace.CopyBitmapToByteArray(out step);
+                        cnn.Open();
+                        using (SqlCommand cmd =
+                            new SqlCommand("INSERT INTO Users VALUES(" +
+                                "@Uid, @Name, @Phone_number, @FaceFront, @Restriction_type)", cnn))
+                        {
+                            cmd.Parameters.AddWithValue("@Uid", Guid.NewGuid());
+                            cmd.Parameters.AddWithValue("@Name", this.NameField.Text);
+                            cmd.Parameters.AddWithValue("@Phone_number", "222");
+                            cmd.Parameters.AddWithValue("@FaceFront", (SqlBinary)imageBytes);
+                            cmd.Parameters.AddWithValue("@Restriction_type", 2);
+
+                            int rows = cmd.ExecuteNonQuery();
+
+                            //rows number of record got inserted
+                        }
                     }
 
-                    face.GrayFace.Save(@"FaceDB/" + this.NameField.Text + ".bmp");
+                    //face.GrayFace.Save(@"FaceDB/" + this.NameField.Text + ".bmp");
 
                     this.takeTrainingImage = false;
                     this.NameField.Text = this.NameField.Text.Replace(this.targetFaces.Count.ToString(), (this.targetFaces.Count + 1).ToString());
@@ -257,30 +280,30 @@ namespace Sacknet.KinectFacialRecognitionDemo
         }
         private void SendAlertMessage()
         {
-            try
-            {
-                MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient(smtpURL);
-                mail.From = new MailAddress(emailSender);
-                mail.To.Add(emailRecipient);
-                mail.Subject = "Kinect Security Alert";
-                mail.Body = "Alert, break in detected.";
+            //try
+            //{
+            //    MailMessage mail = new MailMessage();
+            //    SmtpClient SmtpServer = new SmtpClient(smtpURL);
+            //    mail.From = new MailAddress(emailSender);
+            //    mail.To.Add(emailRecipient);
+            //    mail.Subject = "Kinect Security Alert";
+            //    mail.Body = "Alert, break in detected.";
 
-                System.Net.Mail.Attachment attachment;
-                attachment = new System.Net.Mail.Attachment("C:/Users/Jason/Desktop/SeniorDesignGroup5/KinectSecurity/KSMainApp/bin/Debug/FaceDB/Jason.bmp");
-                mail.Attachments.Add(attachment);
+            //    System.Net.Mail.Attachment attachment;
+            //    attachment = new System.Net.Mail.Attachment("C:/Users/Jason/Desktop/SeniorDesignGroup5/KinectSecurity/KSMainApp/bin/Debug/FaceDB/Jason.bmp");
+            //    mail.Attachments.Add(attachment);
 
-                SmtpServer.Port = portNum;
-                SmtpServer.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
-                SmtpServer.EnableSsl = true;
+            //    SmtpServer.Port = portNum;
+            //    SmtpServer.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
+            //    SmtpServer.EnableSsl = true;
 
-                SmtpServer.Send(mail);
-                MessageBox.Show("Alert Message Sent");
-            }
-            catch (Exception ex)
-	            {
-	                MessageBox.Show("Cannot send message: " + ex.Message);
-	            }
+            //    SmtpServer.Send(mail);
+            //    MessageBox.Show("Alert Message Sent");
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Cannot send message: " + ex.Message);
+            //}
         }
 
     }
