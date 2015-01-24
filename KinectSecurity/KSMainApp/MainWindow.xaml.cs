@@ -11,6 +11,7 @@ using Microsoft.Kinect;
 using Sacknet.KinectFacialRecognition;
 using System.IO;
 using System.Data.SqlClient;
+using System.Net.Mail;
 
 namespace Sacknet.KinectFacialRecognitionDemo
 {
@@ -23,6 +24,14 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private bool FirstLoad = false;
         private KinectFacialRecognitionEngine engine;
         private ObservableCollection<TargetFace> targetFaces = new ObservableCollection<TargetFace>();
+
+        private string smtpURL = "smtp.gmail.com";
+        private string emailSender = "KinectSystemAlert@gmail.com";
+        private string emailRecipient = "sheetsjf@mail.uc.edu";
+        private string emailUsername = "KinectSystemAlert@gmail.com";
+        private string emailPassword = "seniordesign";
+        private Int32 portNum = 587;
+
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class
@@ -163,6 +172,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
         /// </summary>
         private void Train(object sender, RoutedEventArgs e)
         {
+
+            SendAlertMessage();
+
             this.TrainButton.IsEnabled = false;
             this.NameField.IsEnabled = false;
 
@@ -242,6 +254,33 @@ namespace Sacknet.KinectFacialRecognitionDemo
             {
                 MessageBox.Show("Faces Already Loaded");
             }
+        }
+        private void SendAlertMessage()
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient(smtpURL);
+                mail.From = new MailAddress(emailSender);
+                mail.To.Add(emailRecipient);
+                mail.Subject = "Kinect Security Alert";
+                mail.Body = "Alert, break in detected.";
+
+                System.Net.Mail.Attachment attachment;
+                attachment = new System.Net.Mail.Attachment("C:/Users/Jason/Desktop/SeniorDesignGroup5/KinectSecurity/KSMainApp/bin/Debug/FaceDB/Jason.bmp");
+                mail.Attachments.Add(attachment);
+
+                SmtpServer.Port = portNum;
+                SmtpServer.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
+                SmtpServer.EnableSsl = true;
+
+                SmtpServer.Send(mail);
+                MessageBox.Show("Alert Message Sent");
+            }
+            catch (Exception ex)
+	            {
+	                MessageBox.Show("Cannot send message: " + ex.Message);
+	            }
         }
 
     }
