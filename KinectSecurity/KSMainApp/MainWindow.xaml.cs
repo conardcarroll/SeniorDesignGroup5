@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Microsoft.Kinect;
 using Sacknet.KinectFacialRecognition;
 using System.IO;
+using System.Data.SqlClient;
 
 namespace Sacknet.KinectFacialRecognitionDemo
 {
@@ -47,6 +48,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 return;
             }
 
+
             kinectSensor.SkeletonStream.Enable();
             kinectSensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
             kinectSensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
@@ -61,6 +63,23 @@ namespace Sacknet.KinectFacialRecognitionDemo
            
             this.TrainedFaces.ItemsSource = this.targetFaces;
 
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string connetionString = null;
+            SqlConnection cnn;
+            connetionString = "Data Source=kinectdb.cljct8cmess5.us-west-2.rds.amazonaws.com,1433;Initial Catalog=Security_Database;User ID=Group5;Password=Admin2015";
+            cnn = new SqlConnection(connetionString);
+            try
+            {
+                cnn.Open();
+                MessageBox.Show("Connection Open ! ");
+                cnn.Close();
+            }
+            catch (Exception  )
+            {
+                MessageBox.Show("Can not open connection ! ");
+            }
         }
 
         [DllImport("gdi32")]
@@ -224,5 +243,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MessageBox.Show("Faces Already Loaded");
             }
         }
+
     }
 }
