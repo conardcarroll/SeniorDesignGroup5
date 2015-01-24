@@ -89,7 +89,7 @@ namespace Sacknet.KinectFacialRecognition
                     {
                         this.trackedSkeletonId = skeletonOfInterest.TrackingId;
 
-                        if (colorFrame.Width > 10)
+                        if (colorFrame.Width != null)
                         {
                             SendAlert(colorFrame);
                         }
