@@ -267,7 +267,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 mail.Body = "Alert, break in detected.";
 
                 System.Net.Mail.Attachment attachment;
-                attachment = new System.Net.Mail.Attachment("C:/Users/Jason/Desktop/SeniorDesignGroup5/KinectSecurity/KSMainApp/bin/Debug/FaceDB/Jason.bmp");
+                attachment = new System.Net.Mail.Attachment("C:/Users/Jason/Desktop/SeniorDesignGroup5/KinectSecurity/KSMainApp/bin/Debug/FaceDB/Jason.bmp"); //Temporary Path For Attached Image
                 mail.Attachments.Add(attachment);
 
                 SmtpServer.Port = portNum;
