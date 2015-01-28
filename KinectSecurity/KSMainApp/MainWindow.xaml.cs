@@ -13,6 +13,10 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Net.Mail;
 using System.Data.SqlTypes;
+using System.ComponentModel;
+using System.Drawing.Imaging;
+
+
 
 namespace Sacknet.KinectFacialRecognitionDemo
 {
@@ -142,24 +146,36 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
                     }
 
-                    
+
                 }
+
 
                 if (this.takeTrainingImage)
                 {
+                    
                     this.targetFaces.Add(new BitmapSourceTargetFace
                     {
                         Image = (Bitmap)face.GrayFace.Clone(),
                         Key = this.NameField.Text
                     });
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        face.GrayFace.Save(stream, ImageFormat.Png);
+                        result = stream.ToArray();
+                    }
+
 
                     //using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"FaceDB\FaceKeys.txt", true))
                     //{
                     //    file.Write(this.NameField.Text + ",");
                     //}
+                    
                     {
+                        
+                        
                         int step = 0;
-                        byte[] imageBytes = face.GrayFace.CopyBitmapToByteArray(out step);
+                        MemoryStream saveStream = new MemoryStream();
+                        face.GrayFace.Save(saveStream, ImageFormat.Bmp);
                         cnn.Open();
                         using (SqlCommand cmd =
                             new SqlCommand("INSERT INTO Users VALUES(" +
@@ -168,7 +184,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                             cmd.Parameters.AddWithValue("@Uid", Guid.NewGuid());
                             cmd.Parameters.AddWithValue("@Name", this.NameField.Text);
                             cmd.Parameters.AddWithValue("@Phone_number", "222");
-                            cmd.Parameters.AddWithValue("@FaceFront", (SqlBinary)imageBytes);
+                            cmd.Parameters.AddWithValue("@FaceFront", saveStream.ToArray());
                             cmd.Parameters.AddWithValue("@Restriction_type", 2);
 
                             int rows = cmd.ExecuteNonQuery();
@@ -196,7 +212,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Train(object sender, RoutedEventArgs e)
         {
 
-            SendAlertMessage();
+            //SendAlertMessage();
 
             this.TrainButton.IsEnabled = false;
             this.NameField.IsEnabled = false;
@@ -239,34 +255,63 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void LoadFaces(object sender, RoutedEventArgs e)
         {
             if (FirstLoad == false)
+
             {
-                System.IO.StreamReader FaceKeys = new System.IO.StreamReader(@"FaceDB/FaceKeys.txt");
-                string KeyStr, subKey;
-                int counter = 0;
+                 cnn.Open();
+                 using (SqlCommand cmd =
+                     new SqlCommand("SELECT Name, FaceFront FROM Users", cnn))
+                 {
+                     SqlDataReader reader = cmd.ExecuteReader();
 
-                KeyStr = FaceKeys.ReadToEnd();
-                subKey = KeyStr.Split(',')[counter];
+                     if (reader.HasRows)
+                     {
+                         while (reader.Read())
+                         {
+                           
 
-                while (!String.IsNullOrEmpty(subKey))
-                {
-                    try
-                    {
-                        this.targetFaces.Add(new BitmapSourceTargetFace
-                        {
-                            Image = new Bitmap(@"FaceDB/" + subKey + ".bmp"),
-                            Key = subKey
-                        });
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not load " + subKey + ".bmp");
-                    }
+                             ImageConverter ic = new ImageConverter();
+                             byte[] imageBytes = (byte[])reader["FaceFront"];
+                             Image img = (Image)ic.ConvertFrom(imageBytes);
 
-                    counter = counter + 1;
-                    subKey = KeyStr.Split(',').ElementAtOrDefault(counter);
+                             Bitmap bitmap1 = new Bitmap(img);
+                             this.targetFaces.Add(new BitmapSourceTargetFace
+                             {
+                                 Image = bitmap1,
+                                 Key = reader["Name"].ToString()
+
+                             });
+                            
+                         }
+                     }
+                 }
+                
+                //System.IO.StreamReader FaceKeys = new System.IO.StreamReader(@"FaceDB/FaceKeys.txt");
+                //string KeyStr, subKey;
+                //int counter = 0;
+
+                //KeyStr = FaceKeys.ReadToEnd();
+                //subKey = KeyStr.Split(',')[counter];
+
+                //while (!String.IsNullOrEmpty(subKey))
+                //{
+                //    try
+                //    {
+                        //this.targetFaces.Add(new BitmapSourceTargetFace
+                        //{
+                        //    Image = new Bitmap(@"FaceDB/" + subKey + ".bmp"),
+                        //    Key = subKey
+                        //});
+                //    }
+                //    catch
+                //    {
+                //        MessageBox.Show("Could not load " + subKey + ".bmp");
+                //    }
+
+                //    counter = counter + 1;
+                //    subKey = KeyStr.Split(',').ElementAtOrDefault(counter);
                     
                    
-                }
+                //}
 
                 if (this.targetFaces.Count > 1)
                     this.engine.SetTargetFaces(this.targetFaces);
@@ -305,5 +350,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
 	            }
         }
 
+
+        public byte[] result { get; set; }
     }
 }
