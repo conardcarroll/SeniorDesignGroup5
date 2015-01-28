@@ -77,14 +77,14 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
             this.InitializeComponent();
 
-           
+
             this.TrainedFaces.ItemsSource = this.targetFaces;
 
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string connetionString = null;
-            
+
             connetionString = "Data Source=kinectdb.cljct8cmess5.us-west-2.rds.amazonaws.com,1433;Initial Catalog=Security_Database;User ID=Group5;Password=Admin2015";
             cnn = new SqlConnection(connetionString);
             try
@@ -93,7 +93,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MessageBox.Show("Connection Open ! ");
                 //cnn.Close();
             }
-            catch (Exception  )
+            catch (Exception)
             {
                 MessageBox.Show("Can not open connection ! ");
             }
@@ -152,7 +152,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
                 if (this.takeTrainingImage)
                 {
-                    
+
                     this.targetFaces.Add(new BitmapSourceTargetFace
                     {
                         Image = (Bitmap)face.GrayFace.Clone(),
@@ -169,29 +169,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
                     //{
                     //    file.Write(this.NameField.Text + ",");
                     //}
-                    
-                    {
-                        
-                        
-                        int step = 0;
-                        MemoryStream saveStream = new MemoryStream();
-                        face.GrayFace.Save(saveStream, ImageFormat.Bmp);
-                        //cnn.Open();
-                        using (SqlCommand cmd =
-                            new SqlCommand("INSERT INTO Users VALUES(" +
-                                "@Uid, @Name, @Phone_number, @FaceFront, @Restriction_type)", cnn))
-                        {
-                            cmd.Parameters.AddWithValue("@Uid", Guid.NewGuid());
-                            cmd.Parameters.AddWithValue("@Name", this.NameField.Text);
-                            cmd.Parameters.AddWithValue("@Phone_number", "222");
-                            cmd.Parameters.AddWithValue("@FaceFront", saveStream.ToArray());
-                            cmd.Parameters.AddWithValue("@Restriction_type", 2);
 
-                            int rows = cmd.ExecuteNonQuery();
-
-                            //rows number of record got inserted
-                        }
-                    }
+                    SaveToDB(face);
 
                     //face.GrayFace.Save(@"FaceDB/" + this.NameField.Text + ".bmp");
 
@@ -204,6 +183,32 @@ namespace Sacknet.KinectFacialRecognitionDemo
             }
 
             this.Video.Source = LoadBitmap(e.ProcessedBitmap);
+        }
+
+        private void SaveToDB(RecognitionResult.Face face)
+        {
+            try
+            {
+                MemoryStream saveStream = new MemoryStream();
+                face.GrayFace.Save(saveStream, ImageFormat.Bmp);
+                //cnn.Open();
+                using (SqlCommand cmd =
+                    new SqlCommand("INSERT INTO Users VALUES(" +
+                        "@Uid, @Name, @Phone_number, @FaceFront, @Restriction_type)", cnn))
+                {
+                    cmd.Parameters.AddWithValue("@Uid", Guid.NewGuid());
+                    cmd.Parameters.AddWithValue("@Name", this.NameField.Text);
+                    cmd.Parameters.AddWithValue("@Phone_number", "222");
+                    cmd.Parameters.AddWithValue("@FaceFront", saveStream.ToArray());
+                    cmd.Parameters.AddWithValue("@Restriction_type", 2);
+
+                    int rows = cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Failed to save to DB! {0}", ex.Message));
+            }
         }
 
         /// <summary>
@@ -255,63 +260,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void LoadFaces(object sender, RoutedEventArgs e)
         {
             if (FirstLoad == false)
-
             {
-                 //cnn.Open();
-                 using (SqlCommand cmd =
-                     new SqlCommand("SELECT Name, FaceFront FROM Users", cnn))
-                 {
-                     SqlDataReader reader = cmd.ExecuteReader();
-
-                     if (reader.HasRows)
-                     {
-                         while (reader.Read())
-                         {
-                           
-
-                             ImageConverter ic = new ImageConverter();
-                             byte[] imageBytes = (byte[])reader["FaceFront"];
-                             Image img = (Image)ic.ConvertFrom(imageBytes);
-
-                             Bitmap bitmap1 = new Bitmap(img);
-                             this.targetFaces.Add(new BitmapSourceTargetFace
-                             {
-                                 Image = bitmap1,
-                                 Key = reader["Name"].ToString()
-
-                             });
-                            
-                         }
-                     }
-                 }
-                
-                //System.IO.StreamReader FaceKeys = new System.IO.StreamReader(@"FaceDB/FaceKeys.txt");
-                //string KeyStr, subKey;
-                //int counter = 0;
-
-                //KeyStr = FaceKeys.ReadToEnd();
-                //subKey = KeyStr.Split(',')[counter];
-
-                //while (!String.IsNullOrEmpty(subKey))
-                //{
-                //    try
-                //    {
-                        //this.targetFaces.Add(new BitmapSourceTargetFace
-                        //{
-                        //    Image = new Bitmap(@"FaceDB/" + subKey + ".bmp"),
-                        //    Key = subKey
-                        //});
-                //    }
-                //    catch
-                //    {
-                //        MessageBox.Show("Could not load " + subKey + ".bmp");
-                //    }
-
-                //    counter = counter + 1;
-                //    subKey = KeyStr.Split(',').ElementAtOrDefault(counter);
-                    
-                   
-                //}
+                LoadFromDB();
 
                 if (this.targetFaces.Count > 1)
                     this.engine.SetTargetFaces(this.targetFaces);
@@ -323,9 +273,47 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MessageBox.Show("Faces Already Loaded");
             }
         }
+
+        private void LoadFromDB()
+        {
+            try
+            {
+                using (SqlCommand cmd =
+                    new SqlCommand("SELECT Name, FaceFront FROM Users", cnn))
+                {
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+
+
+                            ImageConverter ic = new ImageConverter();
+                            byte[] imageBytes = (byte[])reader["FaceFront"];
+                            Image img = (Image)ic.ConvertFrom(imageBytes);
+
+                            Bitmap bitmap1 = new Bitmap(img);
+                            this.targetFaces.Add(new BitmapSourceTargetFace
+                            {
+                                Image = bitmap1,
+                                Key = reader["Name"].ToString()
+
+                            });
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load from DB! " + ex.Message);
+            }
+        }
         private void SendAlertMessage()
         {
-            try{
+            try
+            {
                 MailMessage mail = new MailMessage();
                 SmtpClient SmtpServer = new SmtpClient(smtpURL);
                 mail.From = new MailAddress(emailSender);
@@ -345,9 +333,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MessageBox.Show("Alert Message Sent");
             }
             catch (Exception ex)
-	            {
-	                MessageBox.Show("Cannot send message: " + ex.Message);
-	            }
+            {
+                MessageBox.Show("Cannot send message: " + ex.Message);
+            }
         }
 
 
