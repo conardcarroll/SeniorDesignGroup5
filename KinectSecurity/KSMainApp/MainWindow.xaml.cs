@@ -212,7 +212,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Train(object sender, RoutedEventArgs e)
         {
 
-            //SendAlertMessage();
+            SendAlertMessage();
 
             this.TrainButton.IsEnabled = false;
             this.NameField.IsEnabled = false;
