@@ -91,7 +91,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             {
                 cnn.Open();
                 MessageBox.Show("Connection Open ! ");
-                cnn.Close();
+                //cnn.Close();
             }
             catch (Exception  )
             {
@@ -176,7 +176,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                         int step = 0;
                         MemoryStream saveStream = new MemoryStream();
                         face.GrayFace.Save(saveStream, ImageFormat.Bmp);
-                        cnn.Open();
+                        //cnn.Open();
                         using (SqlCommand cmd =
                             new SqlCommand("INSERT INTO Users VALUES(" +
                                 "@Uid, @Name, @Phone_number, @FaceFront, @Restriction_type)", cnn))
@@ -257,7 +257,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             if (FirstLoad == false)
 
             {
-                 cnn.Open();
+                 //cnn.Open();
                  using (SqlCommand cmd =
                      new SqlCommand("SELECT Name, FaceFront FROM Users", cnn))
                  {
