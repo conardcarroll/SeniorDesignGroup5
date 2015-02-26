@@ -31,15 +31,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private KinectFacialRecognitionEngine engine;
         private ObservableCollection<TargetFace> targetFaces = new ObservableCollection<TargetFace>();
 
-        private string smtpURL = "smtp.gmail.com";
-        private string emailSender = "KinectSystemAlert@gmail.com";
-        private string emailRecipient = "sheetsjf@mail.uc.edu";
-        private string emailUsername = "KinectSystemAlert@gmail.com";
-        private string emailPassword = "seniordesign";
-        private Int32 portNum = 587;
-
-
-        private SqlConnection cnn;
+        private MySql.Data.MySqlClient.MySqlConnection cnn;
 
 
         /// <summary>
@@ -84,20 +76,15 @@ namespace Sacknet.KinectFacialRecognitionDemo
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
-            MySql.Data.MySqlClient.MySqlConnection cnn;
-
-            string server = "ucfsh.ucfilespace.uc.edu";
+            string server = "localhost";
             string database = "creechky";
-            string uid = "creechky";
+            string uid = "root";
             string password = "Group5";
 
             string connetionString;
             connetionString = "SERVER=" + server + ";" + "DATABASE=" +
             database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
 
-            //connetionString = @"server=ucfsh.ucfilespace.uc.edu;port=3306;user=creechky;password=Group5;database=creechky;Encrypt=true;";
-            //MySqlConnection cnn = null;
             try
             {
                 cnn = new MySql.Data.MySqlClient.MySqlConnection();
@@ -106,9 +93,12 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MessageBox.Show("Connection Open ! ");
                 //cnn.Close();
             }
-            catch (Exception)
+
+
+            catch (MySql.Data.MySqlClient.MySqlException ex)
             {
                 MessageBox.Show("Can not open connection ! ");
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -177,15 +167,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                         result = stream.ToArray();
                     }
 
-
-                    //using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"FaceDB\FaceKeys.txt", true))
-                    //{
-                    //    file.Write(this.NameField.Text + ",");
-                    //}
-
                     SaveToDB(face);
-
-                    //face.GrayFace.Save(@"FaceDB/" + this.NameField.Text + ".bmp");
 
                     this.takeTrainingImage = false;
                     this.NameField.Text = this.NameField.Text.Replace(this.targetFaces.Count.ToString(), (this.targetFaces.Count + 1).ToString());
@@ -205,8 +187,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MemoryStream saveStream = new MemoryStream();
                 face.GrayFace.Save(saveStream, ImageFormat.Bmp);
                 //cnn.Open();
-                using (SqlCommand cmd =
-                    new SqlCommand("INSERT INTO User VALUES(" +
+                using (
+                    MySqlCommand cmd =
+                    new MySqlCommand("INSERT INTO User VALUES(" +
                         "@Uid, @Name, @Phone_number, @FaceFront, @Restriction_type)", cnn))
                 {
                     cmd.Parameters.AddWithValue("@Uid", Guid.NewGuid());
@@ -230,7 +213,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Train(object sender, RoutedEventArgs e)
         {
 
-            SendAlertMessage();
 
             this.TrainButton.IsEnabled = false;
             this.NameField.IsEnabled = false;
@@ -291,10 +273,10 @@ namespace Sacknet.KinectFacialRecognitionDemo
         {
             try
             {
-                using (SqlCommand cmd =
-                    new SqlCommand("SELECT Name, FaceFront FROM Users", cnn))
+                using (MySqlCommand cmd =
+                    new MySqlCommand("SELECT Name, FaceFront FROM User", cnn))
                 {
-                    SqlDataReader reader = cmd.ExecuteReader();
+                    MySqlDataReader reader =  cmd.ExecuteReader();
 
                     if (reader.HasRows)
                     {
@@ -323,33 +305,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MessageBox.Show("Failed to load from DB! " + ex.Message);
             }
         }
-        private void SendAlertMessage()
-        {
-            try
-            {
-                MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient(smtpURL);
-                mail.From = new MailAddress(emailSender);
-                mail.To.Add(emailRecipient);
-                mail.Subject = "Kinect Security Alert";
-                mail.Body = "Alert, break in detected.";
-
-                System.Net.Mail.Attachment attachment;
-                attachment = new System.Net.Mail.Attachment("C:/Users/Jason/Desktop/SeniorDesignGroup5/KinectSecurity/KSMainApp/bin/Debug/FaceDB/Jason.bmp"); //Temporary Path For Attached Image
-                mail.Attachments.Add(attachment);
-
-                SmtpServer.Port = portNum;
-                SmtpServer.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
-                SmtpServer.EnableSsl = true;
-
-                SmtpServer.Send(mail);
-                MessageBox.Show("Alert Message Sent");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Cannot send message: " + ex.Message);
-            }
-        }
+     
 
 
         public byte[] result { get; set; }
