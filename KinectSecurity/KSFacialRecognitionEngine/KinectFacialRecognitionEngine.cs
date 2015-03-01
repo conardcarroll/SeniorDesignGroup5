@@ -80,7 +80,7 @@ namespace Sacknet.KinectFacialRecognition
         /// <param name="faces">The target faces to use for training.  Faces should be 100x100 and grayscale.</param>
         public virtual void SetTargetFaces(IEnumerable<TargetFace> faces)
         {
-            this.SetTargetFaces(faces, 1750);
+            this.SetTargetFaces(faces, 1750); //DEFAULT VALUE IS 1750, increase value to improve recognition
         }
 
         /// <summary>

@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllFramesReadyFrameSource.cs" />
+    <Compile Include="EmailAlert.cs" />
     <Compile Include="FacialRecognitionProcessor.cs" />
     <Compile Include="FloatImage.cs" />
     <Compile Include="BitmapExtensions.cs" />
