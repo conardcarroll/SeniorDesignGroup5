@@ -76,10 +76,11 @@ namespace Sacknet.KinectFacialRecognitionDemo
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string server = "localhost";
-            string database = "creechky";
-            string uid = "root";
-            string password = "Group5";
+            string server = "50.87.248.131";
+
+            string database = "seniorde_actualdb";
+            string uid = "seniorde_dbUser";
+            string password = "Testdata";
 
             string connetionString;
             connetionString = "SERVER=" + server + ";" + "DATABASE=" +
@@ -189,7 +190,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 //cnn.Open();
                 using (
                     MySqlCommand cmd =
-                    new MySqlCommand("INSERT INTO User VALUES(" +
+                    new MySqlCommand("INSERT INTO user VALUES(" +
                         "@Uid, @Name, @Phone_number, @FaceFront, @Restriction_type)", cnn))
                 {
                     cmd.Parameters.AddWithValue("@Uid", Guid.NewGuid());
@@ -274,7 +275,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             try
             {
                 using (MySqlCommand cmd =
-                    new MySqlCommand("SELECT Name, FaceFront FROM User", cnn))
+                    new MySqlCommand("SELECT Name, FaceFront FROM user", cnn))
                 {
                     MySqlDataReader reader =  cmd.ExecuteReader();
 
