@@ -76,7 +76,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string server = "localhost";
+
+            string server = "50.87.248.131";
             string database = "seniorde_actualdb";
             string uid = "seniorde_dbuser";
             string password = "TestData";
