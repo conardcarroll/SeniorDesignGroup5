@@ -79,8 +79,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
             string server = "50.87.248.131";
             string database = "seniorde_actualdb";
-            string uid = "seniorde_dbuser";
-            string password = "TestData";
+            string uid = "seniorde_dbUser";
+            string password = "Testdata";
 
             string connetionString;
             connetionString = "SERVER=" + server + ";" + "DATABASE=" +
@@ -146,7 +146,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
                     using (var g = Graphics.FromImage(e.ProcessedBitmap))
                     {
                         var rect = face.TrackingResults.FaceRect;
-                        g.DrawString(face.Key, new Font("Arial", 20), Brushes.Pink, new System.Drawing.Point(rect.Left, rect.Top - 25));
+                        g.DrawString(face.Key, new Font("Arial", 30), Brushes.Black, new System.Drawing.Point(rect.Left, rect.Top - 25));
+                        this.KeyButton.Content = face.Key;
 
                     }
 
@@ -190,7 +191,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 //cnn.Open();
                 using (
                     MySqlCommand cmd =
-                    new MySqlCommand("INSERT INTO User VALUES(" +
+                    new MySqlCommand("INSERT INTO user VALUES(" +
                         "@Uid, @Name, @Phone_number, @FaceFront, @Restriction_type)", cnn))
                 {
                     cmd.Parameters.AddWithValue("@Uid", Guid.NewGuid());
@@ -275,7 +276,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             try
             {
                 using (MySqlCommand cmd =
-                    new MySqlCommand("SELECT Name, FaceFront FROM User", cnn))
+                    new MySqlCommand("SELECT Name, FaceFront FROM user", cnn))
                 {
                     MySqlDataReader reader =  cmd.ExecuteReader();
 
