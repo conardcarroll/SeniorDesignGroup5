@@ -24,7 +24,7 @@ namespace Sacknet.KinectFacialRecognition
         private string emailUsername = "KinectSystemAlert@gmail.com";
         private string emailPassword = "seniordesign";
         private Int32 portNum = 587;
-        ColorImageFrame AlertFrame;
+        private ColorImageFrame AlertFrame;
 
         private BackgroundWorker recognizerWorker;
 
@@ -32,18 +32,19 @@ namespace Sacknet.KinectFacialRecognition
         {
             this.recognizerWorker = new BackgroundWorker();
             this.recognizerWorker.DoWork += SendAlert_DoWork;
+            this.AlertFrame = null;
         }
 
         public void SendAlert(ColorImageFrame MessageFrame)
         {
-            AlertFrame = MessageFrame;
-            this.recognizerWorker.RunWorkerAsync(MessageFrame);
+            this.AlertFrame = MessageFrame;
+            this.recognizerWorker.RunWorkerAsync(AlertFrame);
+
         }
 
         public void SendAlert_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (SendAlertTestBool == true)
-            {
+
                 byte[] pixeldata = new byte[AlertFrame.PixelDataLength];
                 AlertFrame.CopyPixelDataTo(pixeldata);
                 Bitmap bitmapImage = ImageToBitmap(pixeldata, AlertFrame.Width, AlertFrame.Height);
@@ -55,6 +56,9 @@ namespace Sacknet.KinectFacialRecognition
                 ContentType contentType = new ContentType();
                 contentType.MediaType = MediaTypeNames.Image.Jpeg;
                 contentType.Name = "AlertImage";
+
+                if (SendAlertTestBool == true)
+                {
 
                 try
                 {

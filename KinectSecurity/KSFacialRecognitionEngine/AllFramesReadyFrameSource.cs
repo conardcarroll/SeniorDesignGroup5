@@ -54,6 +54,7 @@ namespace Sacknet.KinectFacialRecognition
             ColorImageFrame colorFrame = null;
             DepthImageFrame depthFrame = null;
             Skeleton[] skeletonData;
+            EmailAlert newAlert = new EmailAlert();
 
             try
             {
@@ -84,6 +85,10 @@ namespace Sacknet.KinectFacialRecognition
                     {
                         this.trackedSkeletonId = skeletonOfInterest.TrackingId;
 
+                        if (colorFrame.Width != 0)
+                        {
+                            newAlert.SendAlert(colorFrame);
+                        }
 
                     }
                 }
@@ -96,7 +101,7 @@ namespace Sacknet.KinectFacialRecognition
             finally
             {
                 if (colorFrame != null)
-                    colorFrame.Dispose();
+                    //colorFrame.Dispose();
 
                 if (depthFrame != null)
                     depthFrame.Dispose();
