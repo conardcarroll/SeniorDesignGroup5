@@ -77,10 +77,16 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            string server = "50.87.248.131";
-            string database = "seniorde_actualdb";
-            string uid = "seniorde_dbUser";
-            string password = "Testdata";
+            string server = "localhost";
+            string database = "creechky";
+            string uid = "root";
+            string password = "Group5";
+
+
+            //string server = "50.87.248.131";
+            //string database = "seniorde_actualdb";
+            //string uid = "seniorde_dbUser";
+            //string password = "Testdata";
 
             string connetionString;
             connetionString = "SERVER=" + server + ";" + "DATABASE=" +

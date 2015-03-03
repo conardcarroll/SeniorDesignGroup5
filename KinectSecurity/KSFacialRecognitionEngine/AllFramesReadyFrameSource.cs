@@ -101,7 +101,8 @@ namespace Sacknet.KinectFacialRecognition
             finally
             {
                 if (colorFrame != null)
-                    //colorFrame.Dispose();
+
+                   // colorFrame.Dispose();
 
                 if (depthFrame != null)
                     depthFrame.Dispose();
