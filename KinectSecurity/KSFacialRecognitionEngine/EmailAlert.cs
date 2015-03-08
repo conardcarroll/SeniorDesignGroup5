@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Threading;
 
 namespace Sacknet.KinectFacialRecognition
 {
@@ -25,6 +26,7 @@ namespace Sacknet.KinectFacialRecognition
         private string emailPassword = "seniordesign";
         private Int32 portNum = 587;
         private ColorImageFrame AlertFrame;
+        AutoResetEvent Resume = new AutoResetEvent(false);
 
         private BackgroundWorker recognizerWorker;
 
@@ -33,12 +35,14 @@ namespace Sacknet.KinectFacialRecognition
             this.recognizerWorker = new BackgroundWorker();
             this.recognizerWorker.DoWork += SendAlert_DoWork;
             this.AlertFrame = null;
+            
         }
 
         public void SendAlert(ColorImageFrame MessageFrame)
         {
             this.AlertFrame = MessageFrame;
             this.recognizerWorker.RunWorkerAsync(AlertFrame);
+            Resume.WaitOne();
 
         }
 
@@ -56,6 +60,7 @@ namespace Sacknet.KinectFacialRecognition
                 ContentType contentType = new ContentType();
                 contentType.MediaType = MediaTypeNames.Image.Jpeg;
                 contentType.Name = "AlertImage";
+                Resume.Set();
 
                 if (SendAlertTestBool == true)
                 {

@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Net.Mime;
 using System.Net.Mail;
+using System.Threading;
 
 namespace Sacknet.KinectFacialRecognition
 {
@@ -87,6 +88,7 @@ namespace Sacknet.KinectFacialRecognition
 
                         if (colorFrame.Width != 0)
                         {
+                            
                             newAlert.SendAlert(colorFrame);
                         }
 
@@ -101,7 +103,9 @@ namespace Sacknet.KinectFacialRecognition
             finally
             {
                 if (colorFrame != null)
-                    //colorFrame.Dispose();
+                    {
+                    colorFrame.Dispose();
+                    }
 
                 if (depthFrame != null)
                     depthFrame.Dispose();

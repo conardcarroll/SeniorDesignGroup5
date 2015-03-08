@@ -34,6 +34,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private MySql.Data.MySqlClient.MySqlConnection cnn;
 
 
+
         /// <summary>
         /// Initializes a new instance of the MainWindow class
         /// </summary>
@@ -72,6 +73,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
 
             this.TrainedFaces.ItemsSource = this.targetFaces;
+
 
         }
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -308,6 +310,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             }
         }
      
+
 
 
         public byte[] result { get; set; }
