@@ -33,6 +33,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
         private MySql.Data.MySqlClient.MySqlConnection cnn;
 
+        DispatcherTimer FaceTimer = new DispatcherTimer();
+        int MaxUnknownFaceTime = 10; //The maximum amount of time (seconds) a face can be unknown before target is trained
 
 
         /// <summary>
@@ -41,6 +43,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
         public MainWindow()
         {
             KinectSensor kinectSensor = null;
+            FaceTimer.Interval = new TimeSpan(0, 0, 1); 
+            FaceTimer.Tick += new EventHandler(FaceTimer_Tick);
 
             // loop through all the Kinects attached to this PC, and start the first that is connected without an error.
             foreach (KinectSensor kinect in KinectSensor.KinectSensors)
@@ -76,19 +80,33 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
 
         }
+
+        private void FaceTimer_Tick(object sender, EventArgs e)
+        {
+            if (MaxUnknownFaceTime > 0)
+            {
+                MaxUnknownFaceTime--;
+            }
+            if (MaxUnknownFaceTime == 0)
+            {
+                takeTrainingImage = true;
+            }
+        }
+
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            string server = "localhost";
-            string database = "creechky";
-            string uid = "root";
-            string password = "Group5";
+            //string server = "localhost";
+            //string database = "creechky";
+            //string uid = "root";
+            //string password = "Group5";
 
 
-            //string server = "50.87.248.131";
-            //string database = "seniorde_actualdb";
-            //string uid = "seniorde_dbUser";
-            //string password = "Testdata";
+            string server = "50.87.248.131";
+            string database = "seniorde_actualdb";
+            string uid = "seniorde_dbUser";
+            string password = "Testdata";
 
             string connetionString;
             connetionString = "SERVER=" + server + ";" + "DATABASE=" +
@@ -150,6 +168,13 @@ namespace Sacknet.KinectFacialRecognitionDemo
             {
                 if (!string.IsNullOrEmpty(face.Key))
                 {
+                    if (FaceTimer.IsEnabled)
+                    {
+                        FaceTimer.Stop();
+                    }
+
+                    MaxUnknownFaceTime = 10;
+
                     // Write the key on the image...
                     using (var g = Graphics.FromImage(e.ProcessedBitmap))
                     {
@@ -160,6 +185,22 @@ namespace Sacknet.KinectFacialRecognitionDemo
                     }
 
 
+                }
+
+                if(string.IsNullOrEmpty(face.Key))
+                {
+                    if (!FaceTimer.IsEnabled)
+                    { 
+                        FaceTimer.Start(); 
+                    }
+
+                    using (var g = Graphics.FromImage(e.ProcessedBitmap))
+                    {
+                        var rect = face.TrackingResults.FaceRect;
+                        g.DrawString(MaxUnknownFaceTime.ToString(), new Font("Arial", 30), Brushes.Black, new System.Drawing.Point(rect.Left, rect.Top - 25));
+                        this.KeyButton.Content = "UNKNOWN";
+
+                    }
                 }
 
 
@@ -228,7 +269,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             this.NameField.IsEnabled = false;
 
             var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(2);
+            timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += (s2, e2) =>
             {
                 timer.Stop();
@@ -315,7 +356,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MessageBox.Show("Failed to load from DB! " + ex.Message);
             }
         }
-     
 
 
 
@@ -328,5 +368,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
         public string uid { get; set; }
 
         public string password { get; set; }
+
     }
 }
