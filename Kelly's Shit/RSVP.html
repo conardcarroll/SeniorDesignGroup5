@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+       <title>RSVP</title>
+     
+       <link href='http://fonts.googleapis.com/css?family=Wellfleet' rel='stylesheet' type='text/css'>
+	   <link href='http://fonts.googleapis.com/css?family=Wellfleet' rel='stylesheet' type='text/css'>
+	   <link href='http://fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>	
+	   <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	   <link href='http://fonts.googleapis.com/css?family=Goudy+Bookletter+1911' rel='stylesheet' type='text/css'>
+	   <script type="text/javascript" src="tinydropdownOS.js"></script>
+	   <link rel="stylesheet" href="TinyDropDownOS.css" type="text/css" />
+       <link rel="stylesheet" href="rsvp.css" type="text/css" />
+	   </head> 
+	   <header id= 'header'>
+		<div class="nav1">
+			<ul id="menu" class="menu">
+				<li class="nodiv"><a href="Weddinghome.html">Home</a></li>
+				<li><a href="">Our Story</a>
+					<ul>
+						<li><a href="HowIMetKelly.html">How I Met Kelly</a></li>
+						<li><a href="HowIMetConard.html">How I Met Conard</a></li>
+						<li><a href="Dogs.html">The Dogs</a></li>
+					</ul>
+				</li>
+				<li><a href="details.html">Wedding</a>
+				<ul>
+					<li><a href="http://embassysuites.hilton.com/en/es/groups/personalized/C/CVGCVES-CCR-20140816/index.jhtml?WT.mc_id=POG">Booking Room</a></li>
+					<li><a href="RSVP.html">RSVP</a></li>
+				</ul>
+				</li>
+				<li><a href="party.html">Bridal Party</a></li>
+			</ul>
+		</div>
+		</header>
+	<div id="important"></div>
+<script type="text/javascript">
+var dropdown=new TINY.dropdown.init("dropdown", {id:'menu', active:'menuhover'});
+</script>
+	 
+          
+	   <script>
+	       document.onload = onload();
+	       function onload() {
+
+	           if (window.XMLHttpRequest) {
+	               // code for IE7+, Firefox, Chrome, Opera, Safari
+	               xmlhttp = new XMLHttpRequest();
+	           } else { // code for IE6, IE5
+	               xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	           }
+	           xmlhttp.onreadystatechange = function () {
+	               if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                   if (xmlhttp.responseText === "") {
+	                       document.getElementById("important").innerHTML = "<label>Failed to validate</label>";
+	                   } else {
+	                       document.getElementById("important").innerHTML = xmlhttp.responseText;
+	                   }
+	               }
+	           }
+	           xmlhttp.open("GET", "onload.php", true);
+	           xmlhttp.send();
+
+	       }
+	       function submit() {
+	           // if (str=="") {
+	           // document.getElementById("txtHint").innerHTML="";
+	           // return;
+	           //} 
+
+	           if (window.XMLHttpRequest) {
+	               // code for IE7+, Firefox, Chrome, Opera, Safari
+	               xmlhttp = new XMLHttpRequest();
+	           } else { // code for IE6, IE5
+	               xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	           }
+
+	           var userName = document.getElementById("UserName").value;
+	           var passWord = document.getElementById("Password").value;
+	           xmlhttp.onreadystatechange = function () {
+	               if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                   if (xmlhttp.responseText === "") {
+	                       document.getElementById("important").innerHTML = "<label>Failed to validate</label>";
+	                   } else {
+	                       document.getElementById("important").innerHTML = xmlhttp.responseText;
+
+	                   }
+	               }
+	           }
+	           xmlhttp.open("GET", "get.php?u=" + userName + "&p=" + passWord, true);
+	           xmlhttp.send();
+	       }
+		   
+
+	       function save() {
+	           // if (str=="") {
+	           // document.getElementById("txtHint").innerHTML="";
+	           // return;
+	           //} 
+
+      
+
+		    var rsvpElm = document.getElementById("forms").childNodes;
+			var emailElm = rsvpElm[0][0];
+			var Email = emailElm.value;
+			var first = true;
+	           for (var i = 0; i < rsvpElm.length; i++) {
+	               var child = rsvpElm[i];
+	   			if(child.nodeName !== "FORM") {
+	   				continue;
+	   			}
+	   				if(first === true) {
+	               var uid = child.attributes['guestnumber'].value;
+	               var firstName = child.elements[1].value;
+	               var last = child.elements[2].value;
+				   var attending = child.elements[3].value;
+				   first = false;
+				} else {
+					var uid = child.attributes['guestnumber'].value;
+	               var firstName = child.elements[0].value;
+	               var last = child.elements[1].value;
+				   var attending = child.elements[2].value;
+				}
+	               //var Email = child.elements[3].value;
+				   
+				   var saladRadios = document.getElementsByName("s" + uid);
+				   var saladSelection = 0;
+
+				   for (var j = 0, length = saladRadios.length; j < length; j++) {
+				       if (saladRadios[j].checked) {
+				           saladSelection = saladRadios[j].value;
+				           break;
+				       }
+				   }
+				   
+				   var entreeRadios = document.getElementsByName("e" + uid);
+				   var entreeSelection = 0;
+				   var entreeDescription = "";
+				   
+				   for (var ii = 0, length = entreeRadios.length; ii < length; ii++) {
+					   if(entreeRadios[ii].checked) {
+						   entreeSelection = entreeRadios[ii].value;
+						   entreeDescription = entreeRadios[ii].nextSibling.textContent;
+						   break;
+					   }
+				   }
+
+	               if (window.XMLHttpRequest) {
+	                   // code for IE7+, Firefox, Chrome, Opera, Safari
+	                   xmlhttp = new XMLHttpRequest();
+	               } else { // code for IE6, IE5
+	                   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	               }
+	               xmlhttp.onreadystatechange = function () {
+	                   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                       if (xmlhttp.responseText === "") {
+	                           document.getElementById("important").innerHTML = "<label>Failed to validate</label>";
+	                       } else {
+	                            document.getElementById("important").innerHTML = xmlhttp.responseText;
+
+	                       }
+	                   }
+	               }
+	               xmlhttp.open("GET", "send.php?u=" + uid + "&fn=" + firstName + "&ln=" + last + "&el=" + Email +
+	   				"&at=" + attending + "&sn=" + saladSelection + "&dn=" + entreeSelection + "&dd=" + entreeDescription, true);
+	               xmlhttp.send();
+	           }
+	       }
+	   	function SelectElement(elementId, value) {
+	   		var selectElement = document.getElementById(elemendId);
+	   		selectElement.value = value;
+	   	}
+	   </script>
+	  </head> 
+	  <body>
+
+	<div id="important"></div>
+
+
+
+</body>
+</html>

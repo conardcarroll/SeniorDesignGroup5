@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Include meta tag to ensure proper rendering and touch zooming -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Include jQuery Mobile stylesheets -->
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+   <link rel="stylesheet" href="FI.css">
+  <!-- Include the jQuery library -->
+  <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <!-- Include the jQuery Mobile library -->
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+
+<div data-role="page" id="HomePage">
+  <div data-role="header">
+    <h4>F.I Home Security App</h4>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <img src="LOGO.png" id="logo" width="225" height="204">
+    
+      <a href="#Alerts" onclick="myAlerts()"><img src="AlertButton.png" id="alert" width="363" height="55"></a>
+      <a href="#Guests" onclick="myGuests()"><img src="ManagwButton.png" id="guest" width="356" height="55"></a>
+      <a href="#History"><img src="historyButton.png" id="history" width="355" height="57"></a>
+      <a href="#Logout"><img src="Logout.png" width="354" id="logout" height="58"></a>
+    
+  </div>
+
+  <div data-role="footer">
+    <h4> &copy; Kelly Creech, Senior Design Group Five  </h4>
+  </div>
+</div> 
+
+<!--------------New Page------------------>
+<div data-role="page" id="Alerts">
+  <div data-role="header">
+    <h4>F.I Home Security App Alerts</h4>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <script>
+			  
+	       
+	       function myAlerts() {
+
+	           if (window.XMLHttpRequest) {
+	               // code for IE7+, Firefox, Chrome, Opera, Safari
+	               xmlhttp = new XMLHttpRequest();
+	           } else { // code for IE6, IE5
+	               xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	           }
+	           xmlhttp.onreadystatechange = function () {
+	               if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                   if (xmlhttp.responseText === "") {
+	                       document.getElementById("ale").innerHTML = "<label>Failed to validate</label>";
+	                   } else {
+	                       document.getElementById("ale").innerHTML = xmlhttp.responseText;
+	                   }
+	               }
+	           }
+	           xmlhttp.open("GET", "http://localhost/alert.php", true);
+	           xmlhttp.send();
+
+	       }
+    </script>
+
+	<div id="ale"></div><br />
+	
+    <a href="#HomePage"><img src="Returnbutton.png" width="186" height="57"></a><img src="AddButton.png" width="186" height="57"><img src="Call911.png" width="184" height="57">
+  
+</div>
+
+
+  <div data-role="footer">
+    <h4> &copy; Kelly Creech, Senior Design Group Five  </h4>
+  </div>
+</div> 
+
+<!--------------New Page------------------>
+<div data-role="page" id="Guests">
+  <div data-role="header">
+   <h4>F.I Home Security App</h4>
+  </div>
+
+  <div data-role="main" class="ui-content">
+  </div>
+  <script>
+			  
+	       
+	       function myGuests() {
+
+	           if (window.XMLHttpRequest) {
+	               // code for IE7+, Firefox, Chrome, Opera, Safari
+	               xmlhttp = new XMLHttpRequest();
+	           } else { // code for IE6, IE5
+	               xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	           }
+	           xmlhttp.onreadystatechange = function () {
+	               if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                   if (xmlhttp.responseText === "") {
+	                       document.getElementById("gue").innerHTML = "<label>Failed to validate</label>";
+	                   } else {
+	                       document.getElementById("gue").innerHTML = xmlhttp.responseText;
+	                   }
+	               }
+	           }
+	           xmlhttp.open("GET", "http://localhost/guest.php", true);
+	           xmlhttp.send();
+
+	       }
+    </script>
+	<div id="gue"></div>
+  <a href="#HomePage"><img src="Returnbutton.png" width="186" height="57"></a><img src="Update.png" width="186" height="57">
+  
+
+
+
+  <div data-role="footer">
+    <h4> &copy; Kelly Creech, Senior Design Group Five  </h4>
+  </div>
+</div> 
+
+<!--------------New Page------------------>
+<div data-role="page" id="History">
+  <div data-role="header">
+    <h4>F.I Home Security App</h4>
+  </div>
+
+  <div data-role="main" class="ui-content">
+  </div>
+
+  <div data-role="footer">
+    <h4> &copy; Kelly Creech, Senior Design Group Five  </h4>
+  </div>
+</div> 
+
+<!--------------New Page------------------>
+<div data-role="page" id="Logout">
+  <div data-role="header">
+    <h4>F.I Home Security App</h4>
+  </div>
+
+  <div data-role="main" class="ui-content">
+  </div>
+
+  <div data-role="footer">
+    <h4> &copy; Kelly Creech, Senior Design Group Five  </h4>
+  </div>
+</div> 
+</body>
+</html>
