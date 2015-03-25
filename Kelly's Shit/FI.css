@@ -40,14 +40,40 @@ h4
 
 #gue
 {
-	 width: 700px ;
+	 width: 550px ;
 	 margin-left: auto;
      margin-right: auto;
 }
 
 #ale
 {
+	 width: 550px ;
+	 margin-left: auto;
+     margin-right: auto;
+}
+#Gbuttons
+{
 	 width: 700px ;
 	 margin-left: auto;
      margin-right: auto;
+}
+#Abuttons
+{
+	 width: 700px ;
+	 margin-left: auto;
+     margin-right: auto;
+}
+table
+{
+ border-collapse: collapse;
+ border: 1px solid black;
+}
+ td, th {
+    border: 1px solid black;
+	margin-left: auto;
+    margin-right: auto;
+}
+td
+{
+text-align: center;
 }

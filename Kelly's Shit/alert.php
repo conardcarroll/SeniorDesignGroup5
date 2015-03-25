@@ -13,15 +13,25 @@ if ($conn->connect_error) {
 
 $sql = "SELECT UID, Name, Phone_number, Restriction_type FROM user where Restriction_type ='2'";
 $result = $conn->query($sql);
+echo "<form>";
+echo"<table> <tr>
+    <th>Add</th>
+    <th>Name</th>
+	<th>Phone Number</th>
+	<th>Image</th>
+	<th>Type</th>
+  </tr>";
 
 if ($result->num_rows > 0) {
      // output data of each row
-     while($row = $result->fetch_assoc()) {
-         echo "<br> id: ". $row["UID"]. " - Name: ". $row["Name"]. " " . $row["Phone_number"] . " "  . " " . $row["Restriction_type"] ."<br>";
-     }
+         while($row = $result->fetch_assoc()) {
+         echo "<tr> <td> <input type='radio' name='all' id='{$row['UID']}'></td><td> ". $row["Name"]. "</td>
+		 <td> " . $row["Phone_number"] . "</td> "  . " <td><img src='Eugene.jpg' id='history'></td>
+		 <td> " . $row["Restriction_type"] ."</td> </tr>";
+     } 
 } else {
      echo "0 results";
 }
-
+echo "</table></form>";
 $conn->close();
 ?>  
