@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 $sql = "SELECT UID, Name, Phone_number, Restriction_type FROM user";
 $result = $conn->query($sql);
 //$UesrID = $row['UID'];
-echo "<form>";
+echo "<form id='frmOne'>";
 echo"<table> <tr>
     <th>Add</th>
     <th>Name</th>
@@ -26,7 +26,7 @@ echo"<table> <tr>
 if ($result->num_rows > 0) {
      // output data of each row
          while($row = $result->fetch_assoc()) {
-         echo "<tr> <td> <input type='radio' name='all' id='{$row['UID']}'></td><td> ". $row["Name"]. "</td>
+         echo "<tr> <td> <a href='#UpdateInfo' id='{$row['UID']}' onclick='AddUpdateGuest(this.id)'> <input type='radio'  name='all' id='{$row['UID']}'></a> </td><td> ". $row["Name"]. "</td>
 		 <td> " . $row["Phone_number"] . "</td> "  . " <td><img src='Eugene.jpg' id='history'></td>
 		 <td> " . $row["Restriction_type"] ."</td> </tr>";
      } 

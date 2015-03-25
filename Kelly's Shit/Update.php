@@ -1,0 +1,32 @@
+  <?php
+$u = $_GET['u'];
+$servername = "localhost";
+$username = "root";
+$password = "Group5";
+$dbname = "Creechky";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+     die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "SELECT UID, Name, Phone_number, Restriction_type FROM user where UID = '".$u."'";
+$result = $conn->query($sql);
+echo "<form>";
+
+
+if ($result->num_rows > 0) {
+     // output data of each row
+         while($row = $result->fetch_assoc()) {
+         echo "<img src='Eugene.jpg' id='history'>
+		 <br /> <a href='#HomePage'> <button type='button' onclick='Submit(this.id)' id='{$row['UID']}'>Submit</button> </a> Name: <input type='text' id='Name' value='{$row['Name']}'> Phone Number: <input type='text' id='Phone_number' value='{$row['Phone_number']}'>
+		 Restriction Type: <input type='text' id='Restriction_type' value='{$row['Restriction_type']}'>";
+     } 
+} else {
+     echo "0 results";
+}
+echo "</table></form>";
+$conn->close();
+?>  
