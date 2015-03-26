@@ -16,7 +16,7 @@ if (mysqli_connect_errno()) {
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
 
-$UpdateResult = mysqli_query($con,"UPDATE user set Name = '{$n}', Phone_number = '{$p}', Restriction_type = '{$r}' where UID = '{$u}'");
+$UpdateResult = mysqli_query($con,"UPDATE creechky.user set Name = '{$n}', Phone_number = '{$p}', Restriction_type = '{$r}' where UID = '{$u}'");
 if(!$UpdateResult)
 {
   echo "Error";
