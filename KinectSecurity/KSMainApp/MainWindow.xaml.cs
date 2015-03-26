@@ -89,7 +89,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
             }
             if (MaxUnknownFaceTime == 0)
             {
-                takeTrainingImage = true;
+                MaxUnknownFaceTime = 10;
+                takeTrainingImage = true;  
             }
         }
 
@@ -97,16 +98,11 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            //string server = "localhost";
-            //string database = "creechky";
-            //string uid = "root";
-            //string password = "Group5";
+            string server = "localhost";
+            string database = "creechky";
+            string uid = "root";
+            string password = "";
 
-
-            string server = "50.87.248.131";
-            string database = "seniorde_actualdb";
-            string uid = "seniorde_dbUser";
-            string password = "Testdata";
 
             string connetionString;
             connetionString = "SERVER=" + server + ";" + "DATABASE=" +
@@ -161,6 +157,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
         {
             RecognitionResult.Face face = null;
 
+            if (e.Faces == null) //if Faces is null, face is lost, reset timer
+                MaxUnknownFaceTime = 10;
+
             if (e.Faces != null)
                 face = e.Faces.FirstOrDefault();
 
@@ -206,7 +205,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
                 if (this.takeTrainingImage)
                 {
-
+                    MaxUnknownFaceTime = 10;
+                    this.takeTrainingImage = false;
                     this.targetFaces.Add(new BitmapSourceTargetFace
                     {
                         Image = (Bitmap)face.GrayFace.Clone(),
@@ -220,19 +220,19 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
                     SaveToDB(face);
 
-                    this.takeTrainingImage = false;
                     this.NameField.Text = this.NameField.Text.Replace(this.targetFaces.Count.ToString(), (this.targetFaces.Count + 1).ToString());
 
                     if (this.targetFaces.Count > 1)
                         this.engine.SetTargetFaces(this.targetFaces);
                 }
             }
-
             this.Video.Source = LoadBitmap(e.ProcessedBitmap);
         }
 
+        int callcount = 0;
         private void SaveToDB(RecognitionResult.Face face)
         {
+            callcount++;   
             try
             {
                 MemoryStream saveStream = new MemoryStream();
@@ -254,6 +254,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             }
             catch (Exception ex)
             {
+                MessageBox.Show("Counter = " + callcount);
                 MessageBox.Show(string.Format("Failed to save to DB! {0}", ex.Message));
             }
         }
@@ -308,7 +309,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
             if (FirstLoad == false)
             {
                 LoadFromDB();
-
                 if (this.targetFaces.Count > 1)
                     this.engine.SetTargetFaces(this.targetFaces);
 
@@ -334,7 +334,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
                         while (reader.Read())
                         {
 
-
                             ImageConverter ic = new ImageConverter();
                             byte[] imageBytes = (byte[])reader["FaceFront"];
                             Image img = (Image)ic.ConvertFrom(imageBytes);
@@ -348,7 +347,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
                             });
 
                         }
+
                     }
+                    reader.Close();
                 }
             }
             catch (Exception ex)
