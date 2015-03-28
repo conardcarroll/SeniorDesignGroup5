@@ -97,16 +97,16 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            //string server = "localhost";
-            //string database = "creechky";
-            //string uid = "root";
-            //string password = "Group5";
+            string server = "localhost";
+            string database = "creechky";
+            string uid = "root";
+            string password = "Group5";
 
 
-            string server = "50.87.248.131";
-            string database = "seniorde_actualdb";
-            string uid = "seniorde_dbUser";
-            string password = "Testdata";
+            //string server = "50.87.248.13";
+            //string database = "seniorde_actualdb";
+            //string uid = "seniorde_dbUser";
+            //string password = "Testdata";
 
             string connetionString;
             connetionString = "SERVER=" + server + ";" + "DATABASE=" +
@@ -247,6 +247,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                     cmd.Parameters.AddWithValue("@Name", this.NameField.Text);
                     cmd.Parameters.AddWithValue("@Phone_number", "222");
                     cmd.Parameters.AddWithValue("@FaceFront", saveStream.ToArray());
+                    //cmd.Parameters.AddWithValue("@ColorImage", saveStream.ToArray());
                     cmd.Parameters.AddWithValue("@Restriction_type", 2);
 
                     int rows = cmd.ExecuteNonQuery();

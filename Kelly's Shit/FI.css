@@ -1,35 +1,48 @@
 @charset "utf-8";
 /* CSS Document */
-
+.ui-header
+{
+font-size: .6em;
+}
 #alert
 {
 	 display: block;
 	 margin-left: auto;
-    margin-right: auto;
+     margin-right: auto;
+	 width:100%;
+	 padding-bottom: 3px;
 }
 #guest
 {
 	 display: block;
 	 margin-left: auto;
-    margin-right: auto;
+     margin-right: auto;
+	 width:100%;
+	 padding-bottom: 5px;
+	
 }
 #history
 {
 	 display: block;
 	 margin-left: auto;
     margin-right: auto;
+	 width:100%;
+	padding-bottom: 5px;
 }
+
 #logout
 {
 	 display: block;
 	 margin-left: auto;
     margin-right: auto;
+	 width:100%;
 }
 #logo
 {
 	 display: block;
 	 margin-left: auto;
      margin-right: auto;
+	 height: 175px;
 }
 h4
 {
@@ -77,3 +90,5 @@ td
 {
 text-align: center;
 }
+[data-role=page]{height: 100% !important; position:relative !important;}
+[data-role=footer]{bottom:0; position:relative ;}

@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
 		$image = $row['FaceFront'];
          echo "<tr> <td> <a href='#UpdateInfo' id='{$row['UID']}' onclick='AddUpdateGuest(this.id)'> <input type='radio'  name='all' id='{$row['UID']}'></a> </td><td> ". $row["Name"]. "</td>
 		 <td> " . $row["Phone_number"] . "</td> "  . " <td>";
-		 echo '<img src="data:image/jpeg;base64,'.base64_encode($image) .'" />';;
+		 echo '<img src="data:image/jpeg;base64,'.base64_encode($image) .'" />';
 		 
 		 echo "</td><td> " . $row["Restriction_type"] ."</td> </tr>";
      } 
