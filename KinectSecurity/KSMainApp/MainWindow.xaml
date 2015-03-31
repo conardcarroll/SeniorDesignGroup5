@@ -9,6 +9,7 @@
         <Button x:Name="LoadButton" Content="Load" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,6,0,0" Click="LoadFaces" />
         <Button x:Name="KeyButton" Content="UNKNOWN" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="541,0,0,69"/>
         <TextBox x:Name="NameField"  Height="25" Width="204" HorizontalAlignment="Left" VerticalAlignment="Top" Text="Face 1" Margin="25,578,0,0" />
+        <TextBox x:Name="VideoPath"  Height="25" Width="204" HorizontalAlignment="Right" VerticalAlignment="Top" Text="C:/Users/Jason/Desktop/" Margin="0,579,223.333,0" />
         <Button x:Name="TrainButton" Click="Train" Content="Train!" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="246,579,0,0" />
         <ItemsControl x:Name="TrainedFaces" Margin="679,35,-24,-35">
             <ItemsControl.ItemTemplate>

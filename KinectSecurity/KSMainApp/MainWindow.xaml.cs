@@ -93,6 +93,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             {
                 MaxUnknownFaceTime = 10;
                 LastKnownKey = "";
+                AlertAVI.filePath = VideoPath.Text;
                 takeTrainingImage = true;
                 AlertAVI.SaveVideo = true;
             }

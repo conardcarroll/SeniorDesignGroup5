@@ -28,7 +28,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
         public bool SaveVideo = false; //Set to true when unknown dude is detected
         private bool FirstSave = true;
-        public string filePath = "D:/Users/Jason/Desktop/";
+        public string filePath = "";
         AutoResetEvent Resume = new AutoResetEvent(false);
 
         public AlertVideo()
@@ -76,7 +76,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
             if (SaveVideo == true && FirstSave == true)
             {
                 FirstSave = false;
-
                 AviManager aviManager = new AviManager(filePath + "INTRUDER.avi", false);
                 VideoStream aviStream = aviManager.AddVideoStream(false, 30, FrameArray[0]);
 
