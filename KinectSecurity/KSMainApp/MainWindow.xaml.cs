@@ -30,6 +30,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private bool FirstLoad = false;
         private KinectFacialRecognitionEngine engine;
         private ObservableCollection<TargetFace> targetFaces = new ObservableCollection<TargetFace>();
+        private AlertVideo AlertAVI = new AlertVideo();
 
         private MySql.Data.MySqlClient.MySqlConnection cnn;
 
@@ -92,7 +93,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
             {
                 MaxUnknownFaceTime = 10;
                 LastKnownKey = "";
-                takeTrainingImage = true;  
+                takeTrainingImage = true;
+                AlertAVI.SaveVideo = true;
             }
         }
 
@@ -168,6 +170,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Engine_RecognitionComplete(object sender, RecognitionResult e)
         {
             RecognitionResult.Face face = null;
+            AlertAVI.BuildArray(e.OriginalBitmap);
 
             if (e.Faces == null) //if Faces is null, face is lost, reset timer
             {
@@ -176,7 +179,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
             }
 
             if (e.Faces != null)
+            {
                 face = e.Faces.FirstOrDefault();
+            }
 
             if (face != null)
             {

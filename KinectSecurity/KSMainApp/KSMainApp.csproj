@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AlertVideo.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -120,6 +121,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AVIwrapper\aviFileWrapper_src\AviFile.csproj">
+      <Project>{abb32a29-af50-47fa-b243-5fd75a5aba54}</Project>
+      <Name>AviFile</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KSFacialRecognitionEngine\KSFacialRecognitionEngine.csproj">
       <Project>{d10c23ec-ab96-4103-9d53-0c2089a3bcfb}</Project>
       <Name>KSFacialRecognitionEngine</Name>
