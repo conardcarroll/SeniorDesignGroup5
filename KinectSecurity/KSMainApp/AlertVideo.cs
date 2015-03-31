@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Threading;
 using AviFile;
-
+using System.Windows;
 namespace Sacknet.KinectFacialRecognitionDemo
 {
 
@@ -27,7 +27,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private BackgroundWorker VideoArrayBuilder; //Manage an array of the previous 300 frames (10 second video at 30fps)
 
         public bool SaveVideo = false; //Set to true when unknown dude is detected
-        private bool FirstSave = true;
+        public bool SaveEnabled = false;
         public string filePath = "";
         AutoResetEvent Resume = new AutoResetEvent(false);
 
@@ -73,9 +73,10 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 temp = 0;
             }
 
-            if (SaveVideo == true && FirstSave == true)
+            if (SaveVideo == true && SaveEnabled == true)
             {
-                FirstSave = false;
+                SaveEnabled = false;
+                SaveVideo = false;
                 AviManager aviManager = new AviManager(filePath + "INTRUDER.avi", false);
                 VideoStream aviStream = aviManager.AddVideoStream(false, 30, FrameArray[0]);
 
@@ -87,6 +88,11 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
                 aviManager.Close();
 
+            }
+            if (SaveVideo == true && SaveEnabled == false)
+            {
+                MessageBox.Show("Save not enabled!");
+                SaveVideo = false;
             }
             
 

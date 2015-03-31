@@ -5,11 +5,12 @@
     <Grid Margin="0,0,-0.333,29">
         <Image x:Name="Video" Width="640" Height="480" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
         <TextBlock Width="320" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="26,520,0,44" ><Run Text="Enter your name and press capture - a training picture will be taken in 2 seconds.  You must have at least 2 training images to enable recognition."/></TextBlock>
-        
+
         <Button x:Name="LoadButton" Content="Load" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,6,0,0" Click="LoadFaces" />
-        <Button x:Name="KeyButton" Content="UNKNOWN" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="541,0,0,69"/>
+        <Button x:Name="ArmButton" Content="ARM" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="541,0,0,68" Click="ArmButton_Click"/>
         <TextBox x:Name="NameField"  Height="25" Width="204" HorizontalAlignment="Left" VerticalAlignment="Top" Text="Face 1" Margin="25,578,0,0" />
-        <TextBox x:Name="VideoPath"  Height="25" Width="204" HorizontalAlignment="Right" VerticalAlignment="Top" Text="C:/Users/Jason/Desktop/" Margin="0,579,223.333,0" />
+        <TextBox x:Name="VideoPath"  Height="25" Width="204" HorizontalAlignment="Right" VerticalAlignment="Top" Text="C:/Users/Jason/Desktop/" Margin="0,593,223.333,0" />
+        <TextBox x:Name="EmailBox"  Height="25" Width="204" HorizontalAlignment="Right" VerticalAlignment="Bottom" Text="sheetsjf@mail.uc.edu" Margin="0,0,223.333,36" />
         <Button x:Name="TrainButton" Click="Train" Content="Train!" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="246,579,0,0" />
         <ItemsControl x:Name="TrainedFaces" Margin="679,35,-24,-35">
             <ItemsControl.ItemTemplate>

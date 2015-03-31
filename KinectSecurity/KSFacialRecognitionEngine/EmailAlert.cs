@@ -15,13 +15,13 @@ using System.Threading;
 
 namespace Sacknet.KinectFacialRecognition
 {
-    class EmailAlert
+    public class EmailAlert
     {
         private bool SendAlertTestBool = false; //SHOULD BE TRUE
 
         private string smtpURL = "smtp.gmail.com";
         private string emailSender = "KinectSystemAlert@gmail.com";
-        private string emailRecipient = "sheetsjf@mail.uc.edu";
+        private string emailRecipient = "sheetsjf@mail.uc.edu"; //Default Value
         private string emailUsername = "KinectSystemAlert@gmail.com";
         private string emailPassword = "seniordesign";
         private Int32 portNum = 587;

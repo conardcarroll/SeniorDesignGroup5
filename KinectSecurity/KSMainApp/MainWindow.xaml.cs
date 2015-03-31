@@ -31,6 +31,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private KinectFacialRecognitionEngine engine;
         private ObservableCollection<TargetFace> targetFaces = new ObservableCollection<TargetFace>();
         private AlertVideo AlertAVI = new AlertVideo();
+        //private EmailAlert AlertMessage = new EmailAlert();
 
         private MySql.Data.MySqlClient.MySqlConnection cnn;
 
@@ -76,7 +77,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             this.engine.RecognitionComplete += this.Engine_RecognitionComplete;
 
             this.InitializeComponent();
-
+            ArmButton.Background = System.Windows.Media.Brushes.Blue;
 
             this.TrainedFaces.ItemsSource = this.targetFaces;
 
@@ -93,9 +94,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
             {
                 MaxUnknownFaceTime = 10;
                 LastKnownKey = "";
-                AlertAVI.filePath = VideoPath.Text;
                 takeTrainingImage = true;
                 AlertAVI.SaveVideo = true;
+                ArmButton.Background = System.Windows.Media.Brushes.Blue;
             }
         }
 
@@ -200,7 +201,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
                     {
                         var rect = face.TrackingResults.FaceRect;
                         g.DrawString(face.Key, new Font("Arial", 30), Brushes.Red, new System.Drawing.Point(rect.Left, rect.Top - 25));
-                        this.KeyButton.Content = face.Key;
                         LastKnownKey = face.Key;
 
                     }
@@ -219,7 +219,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
                     {
                         var rect = face.TrackingResults.FaceRect;
                         g.DrawString(LastKnownKey + " " + MaxUnknownFaceTime.ToString(), new Font("Arial", 30), Brushes.Red, new System.Drawing.Point(rect.Left, rect.Top - 25));
-                        this.KeyButton.Content = "UNKNOWN";
 
                     }
                 }
@@ -381,7 +380,13 @@ namespace Sacknet.KinectFacialRecognitionDemo
             }
         }
 
-
+        private void ArmButton_Click(object sender, RoutedEventArgs e)
+        {
+            ArmButton.Background = System.Windows.Media.Brushes.Red;
+            AlertAVI.filePath = VideoPath.Text;
+            AlertAVI.SaveEnabled = true;
+            MessageBox.Show("Video File Path set to " + VideoPath.Text);
+        }
 
         public byte[] result { get; set; }
 
@@ -392,6 +397,8 @@ namespace Sacknet.KinectFacialRecognitionDemo
         public string uid { get; set; }
 
         public string password { get; set; }
+
+
 
     }
 }
