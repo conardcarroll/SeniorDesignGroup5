@@ -17,7 +17,7 @@ namespace Sacknet.KinectFacialRecognition
 {
     public class EmailAlert
     {
-        private bool SendAlertTestBool = false; //SHOULD BE TRUE
+        private bool SendAlertTestBool = true; //SHOULD BE TRUE
 
         private string smtpURL = "smtp.gmail.com";
         private string emailSender = "KinectSystemAlert@gmail.com";
@@ -91,6 +91,7 @@ namespace Sacknet.KinectFacialRecognition
                 }
                 SendAlertTestBool = false;
                 AlertFrame.Dispose();
+                bitmapImage.Dispose();
             }
 
         }

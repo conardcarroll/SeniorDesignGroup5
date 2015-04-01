@@ -21,6 +21,7 @@ namespace Sacknet.KinectFacialRecognition
     {
         private KinectSensor sensor;
         private int trackedSkeletonId = -1;
+        private bool FirstAlert = true;
 
 
 
@@ -55,6 +56,7 @@ namespace Sacknet.KinectFacialRecognition
             ColorImageFrame colorFrame = null;
             DepthImageFrame depthFrame = null;
             Skeleton[] skeletonData;
+            EmailAlert Alert = new EmailAlert();
 
             try
             {
@@ -84,7 +86,12 @@ namespace Sacknet.KinectFacialRecognition
                     if (skeletonOfInterest != null)
                     {
                         this.trackedSkeletonId = skeletonOfInterest.TrackingId;
-
+                        if(FirstAlert)
+                        {
+                            Alert.SendAlert(colorFrame);
+                            FirstAlert = false;
+                        }
+                        
                     }
                 }
 
