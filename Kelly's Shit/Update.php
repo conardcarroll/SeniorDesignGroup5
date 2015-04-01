@@ -24,8 +24,9 @@ if ($result->num_rows > 0) {
          while($row = $result->fetch_assoc()) {
 		$image = $row['FaceFront'];
          echo '<img src="data:image/jpeg;base64,'.base64_encode($image) .'" />';
-		echo " <br /> <a href='#HomePage'> <button type='button' onclick='Submit(this.id)' id='{$row['UID']}'>Submit</button> </a> Name: <input type='text' id='Name' value='{$row['Name']}'> Phone Number: <input type='text' id='Phone_number' value='{$row['Phone_number']}'>
-		 Restriction Type: <input type='text' id='Restriction_type' value='{$row['Restriction_type']}'>";
+		echo " <br /> <a href='#HomePage'> <button type='button' onclick='Delete(this.id)' id='{$row['UID']}'>Delete</button></a> <br /> 
+		Name: <br /><input type='text' id='Name' value='{$row['Name']}'><br /> Phone Number:<br /> <input type='text' id='Phone_number' value='{$row['Phone_number']}'><br />
+		 Restriction Type: <br /><input type='text' id='Restriction_type' value='{$row['Restriction_type']}'><br /><a href='#HomePage'><button type='button' onclick='Submit(this.id)' id='{$row['UID']}'>Submit</button></a>";
      } 
 } else {
      echo "0 results";

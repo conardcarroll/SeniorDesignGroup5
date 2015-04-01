@@ -36,7 +36,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private MySql.Data.MySqlClient.MySqlConnection cnn;
 
         DispatcherTimer FaceTimer = new DispatcherTimer();
-        int MaxUnknownFaceTime = 10; //The maximum amount of time (seconds) a face can be unknown before target is trained
+        int MaxUnknownFaceTime = 5; //The maximum amount of time (seconds) a face can be unknown before target is trained
         string LastKnownKey = "";
 
 
@@ -92,7 +92,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             }
             if (MaxUnknownFaceTime == 0)
             {
-                MaxUnknownFaceTime = 10;
+                MaxUnknownFaceTime = 5;
                 LastKnownKey = "";
                 takeTrainingImage = true;
                 AlertAVI.SaveVideo = true;
@@ -176,7 +176,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
             if (e.Faces == null) //if Faces is null, face is lost, reset timer
             {
-                MaxUnknownFaceTime = 10;
+                MaxUnknownFaceTime = 5;
                 LastKnownKey = "";
             }
 
@@ -194,7 +194,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                         FaceTimer.Stop();
                     }
 
-                    MaxUnknownFaceTime = 10;
+                    MaxUnknownFaceTime = 5;
 
                     // Write the key on the image...
                     using (var g = Graphics.FromImage(e.ProcessedBitmap))
@@ -226,7 +226,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
 
                 if (this.takeTrainingImage)
                 {
-                    MaxUnknownFaceTime = 10;
+                    MaxUnknownFaceTime = 5;
                     this.takeTrainingImage = false;
                     this.targetFaces.Add(new BitmapSourceTargetFace
                     {

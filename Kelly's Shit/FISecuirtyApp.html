@@ -70,8 +70,8 @@
 
 	<div id="ale"></div><br />
 	<div id="Abuttons">
-    <a href="#HomePage"><img src="Returnbutton.png" width="186" height="57"></a>
-	<img src="Call911.png" width="184" height="57"></a>
+    <a href="#HomePage"> <img src="Returnbutton.png" width="86" ></a>
+	<a href="tel:+6494461709"><img src="Call911.png" width="84"></a>
   </div>
 </div>
 
@@ -116,7 +116,7 @@
     </script>
 	<div id="gue"></div>
 	<div id="Gbuttons">
-  <a href="#HomePage"><img src="Returnbutton.png" width="186" height="57"></a>
+  <a href="#HomePage"> <img src="Returnbutton.png" width="86" ></a>
   
   </div>
 
@@ -188,9 +188,13 @@
 	           xmlhttp.open("GET", "http://localhost/Update.php ?u=" + clicked_id, true);
 	           xmlhttp.send();
      }
+	 
+	 
+	 
+	 
     </script>
 	<div id="AUG"></div>
-	 <a href="#HomePage"> <img src="Returnbutton.png" width="186" height="57"></a>
+	 <a href="#HomePage"> <img src="Returnbutton.png" width="86" ></a>
 	   <script>
    
 	       function Submit(clicked_id) {
@@ -213,6 +217,35 @@
 	           xmlhttp.open("GET", "http://localhost/submit.php?u=" + clicked_id + "&n=" + name + "&p=" + phone + "&r=" + Rid, true);
 	           xmlhttp.send();
      }
+	 
+	 	       function Delete(clicked_id) {
+			
+    if (confirm("Are You sure you want To delete this person.") == true)
+	{
+       
+		   var id = document.getElementById(clicked_id)
+		   var name = document.getElementById("Name").value;
+		   var phone = document.getElementById("Phone_number").value;
+		   var Rid = document.getElementById("Restriction_type").value;
+		   
+		   if (window.XMLHttpRequest) {
+	                   // code for IE7+, Firefox, Chrome, Opera, Safari
+	                   xmlhttp = new XMLHttpRequest();
+	               } else { // code for IE6, IE5
+	                   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	               }
+	               xmlhttp.onreadystatechange = function () {
+	                   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                      
+	                   }
+	               }
+	           xmlhttp.open("GET", "http://localhost/Delete.php?u=" + clicked_id, true);
+	           xmlhttp.send();
+    } else {
+        alert("Delete Stoped");
+    }
+   
+}
     </script>
   </div>
 
