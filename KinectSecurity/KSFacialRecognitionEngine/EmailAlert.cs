@@ -119,6 +119,7 @@ namespace Sacknet.KinectFacialRecognition
                     
                 }
                 SendAlertTestBool = false;
+
                 ba = null;
                 Dispose();
                 

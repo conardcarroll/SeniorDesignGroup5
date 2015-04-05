@@ -58,6 +58,7 @@ namespace Sacknet.KinectFacialRecognition
             ColorImageFrame colorFrame = null;
             DepthImageFrame depthFrame = null;
             Skeleton[] skeletonData;
+            EmailAlert Alert = new EmailAlert();
 
             try
             {
