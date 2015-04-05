@@ -17,7 +17,7 @@ using System.Windows;
 namespace Sacknet.KinectFacialRecognitionDemo
 {
 
-    class AlertVideo
+    public class AlertVideo : IDisposable
     {
 
         
@@ -26,25 +26,31 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private int arrayCounter = 0;
         private BackgroundWorker VideoArrayBuilder; //Manage an array of the previous 300 frames (10 second video at 30fps)
 
-        public bool SaveVideo = false; //Set to true when unknown dude is detected
-        public bool SaveEnabled = false;
+        public bool SaveVideo = false; //Set to true when PROGRAM is triggered to save a video
+        public bool SaveEnabled = false; //Set to true when USER wants to save a video
         public string filePath = "";
         AutoResetEvent Resume = new AutoResetEvent(false);
 
+        //
+        //As soon as 300 frames are recieved, a video is saved
         public AlertVideo()
         {
-            this.VideoArrayBuilder = new BackgroundWorker();
-            this.VideoArrayBuilder.DoWork += BuildArray_DoWork;
-            this.NewFrame = null;
+            //this.VideoArrayBuilder = new BackgroundWorker();
+            //this.VideoArrayBuilder.DoWork += BuildArray_DoWork;
+            //this.NewFrame = null;
         }
 
         public void BuildArray(Bitmap CurrentFrame)
         {
-            this.NewFrame = CurrentFrame;
-            if (!this.VideoArrayBuilder.IsBusy)
+            if(SaveVideo == true && SaveEnabled == true) //Only build a video if both USER and PROGRAM give the OK
             {
-                this.VideoArrayBuilder.RunWorkerAsync(NewFrame);
-                Resume.WaitOne();
+                this.NewFrame = CurrentFrame;
+
+                if (!this.VideoArrayBuilder.IsBusy)
+                    {
+                        this.VideoArrayBuilder.RunWorkerAsync(NewFrame);
+                        Resume.WaitOne();
+                    }
             }
 
         }
@@ -59,26 +65,13 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 Resume.Set();
                 arrayCounter++;
             }
-            else
+
+            if (SaveVideo == true && SaveEnabled == true && arrayCounter == 301)
             {
-                FrameArray[301] = NewFrame;
-                Resume.Set();
-
-                while (temp <= 300)
-                {
-                    FrameArray[temp] = FrameArray[temp + 1];
-                    temp++;
-                }
-
-                temp = 0;
-            }
-
-            if (SaveVideo == true && SaveEnabled == true)
-            {
-                SaveEnabled = false;
+                SaveEnabled = false; //User and program must re-request a video before saving again
                 SaveVideo = false;
-                AviManager aviManager = new AviManager(filePath + "INTRUDER.avi", false);
-                VideoStream aviStream = aviManager.AddVideoStream(false, 30, FrameArray[0]);
+                AviManager aviManager = new AviManager(filePath + string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now) + "INTRUDER.avi", false);
+                VideoStream aviStream = aviManager.AddVideoStream(true, 30, FrameArray[0]);
 
                 while (temp < arrayCounter)
                 {
@@ -86,15 +79,40 @@ namespace Sacknet.KinectFacialRecognitionDemo
                     temp++;
                 }
 
+                
+                //aviStream.Close();
                 aviManager.Close();
-
-            }
-            if (SaveVideo == true && SaveEnabled == false)
-            {
-                MessageBox.Show("Save not enabled!");
-                SaveVideo = false;
+                Dispose();
             }
             
+
+        }
+
+        public void ReArm()
+        {
+            this.VideoArrayBuilder = new BackgroundWorker();
+            this.VideoArrayBuilder.DoWork += BuildArray_DoWork;
+            this.NewFrame = null;
+        }
+
+        public void Dispose()
+        {
+            if(this.NewFrame != null)
+            {
+                this.NewFrame.Dispose();
+                this.NewFrame = null;
+            }
+
+            if(this.FrameArray != null)
+            {
+                this.FrameArray = null;
+            }
+
+            if(this.VideoArrayBuilder != null)
+            {
+                this.VideoArrayBuilder.Dispose();
+                this.VideoArrayBuilder = null;
+            }
 
         }
 

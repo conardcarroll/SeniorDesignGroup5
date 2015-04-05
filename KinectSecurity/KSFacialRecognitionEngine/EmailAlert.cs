@@ -12,12 +12,13 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Sacknet.KinectFacialRecognition
 {
-    public class EmailAlert
+    public class EmailAlert : IDisposable
     {
-        private bool SendAlertTestBool = false; //SHOULD BE TRUE
+        private bool SendAlertTestBool = true; //SHOULD BE TRUE
 
         private string smtpURL = "smtp.gmail.com";
         private string emailSender = "KinectSystemAlert@gmail.com";
@@ -69,6 +70,7 @@ namespace Sacknet.KinectFacialRecognition
                 {
                     MailMessage mail = new MailMessage();
                     SmtpClient SmtpServer = new SmtpClient(smtpURL);
+                    SmtpServer.Timeout = 10000;
                     mail.From = new MailAddress(emailSender);
                     mail.To.Add(emailRecipient);
                     mail.Subject = "Kinect Security Alert";
@@ -82,15 +84,44 @@ namespace Sacknet.KinectFacialRecognition
                     SmtpServer.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
                     SmtpServer.EnableSsl = true;
 
+
                     SmtpServer.Send(mail);
-                    //MessageBox.Show("Alert Message Sent");
+                    
+                    attachment.Dispose();
+                    mail.Dispose();
+                    SmtpServer.Dispose();
+                    MessageBox.Show("Alert Message Sent");
                 }
                 catch (Exception ex)
                 {
-                    // MessageBox.Show("Cannot send message: " + ex.Message);
+
+                    MailMessage lmail = new MailMessage();
+                    SmtpClient lSmtpServer = new SmtpClient(smtpURL);
+
+                    lmail.From = new MailAddress(emailSender);
+                    lmail.To.Add(emailRecipient);
+                    lmail.Subject = "Kinect Security Alert";
+                    lmail.Body = "Alert, break in detected.";
+
+                    System.Net.Mail.Attachment lattachment;
+                    lattachment = new System.Net.Mail.Attachment(memStream, contentType);
+                    lmail.Attachments.Add(lattachment);
+                    lSmtpServer.Port = portNum;
+                    lSmtpServer.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
+                    lSmtpServer.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                    lSmtpServer.PickupDirectoryLocation = @"C:\users\Jason\Desktop";
+                    lSmtpServer.Send(lmail);
+
+                    lattachment.Dispose();
+                    lmail.Dispose();
+                    lSmtpServer.Dispose();
+                    MessageBox.Show("Cannot send message: " + ex.Message + " Message saved locally instead");
+                    
                 }
                 SendAlertTestBool = false;
-                AlertFrame.Dispose();
+                ba = null;
+                Dispose();
+                
             }
 
         }
@@ -103,6 +134,22 @@ namespace Sacknet.KinectFacialRecognition
             Marshal.Copy(buffer, 0, ptr, buffer.Length);
             bmap.UnlockBits(bmapdata);
             return bmap;
+        }
+
+        public void Dispose()
+        {
+            if(this.AlertFrame != null)
+            {
+                this.AlertFrame.Dispose();
+                this.AlertFrame = null;
+            }
+
+            if(this.recognizerWorker != null)
+            {
+                this.recognizerWorker.Dispose();
+                this.recognizerWorker = null;
+            }
+
         }
 
     }

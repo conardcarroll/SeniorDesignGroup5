@@ -31,7 +31,6 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private KinectFacialRecognitionEngine engine;
         private ObservableCollection<TargetFace> targetFaces = new ObservableCollection<TargetFace>();
         private AlertVideo AlertAVI = new AlertVideo();
-        //private EmailAlert AlertMessage = new EmailAlert();
 
         private MySql.Data.MySqlClient.MySqlConnection cnn;
 
@@ -95,7 +94,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 MaxUnknownFaceTime = 5;
                 LastKnownKey = "";
                 takeTrainingImage = true;
-                AlertAVI.SaveVideo = true;
+                AlertAVI.SaveVideo = true; //Face Timed out, Program wants to start saving a video
                 ArmButton.Background = System.Windows.Media.Brushes.Blue;
             }
         }
@@ -108,7 +107,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
             string database = "creechky";
             string uid = "root";
 
-            string password = "Group5";
+            string password = "";
 
 
             //string server = "50.87.248.13";
@@ -172,7 +171,20 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void Engine_RecognitionComplete(object sender, RecognitionResult e)
         {
             RecognitionResult.Face face = null;
-            AlertAVI.BuildArray(e.OriginalBitmap);
+
+            if (AlertAVI.SaveVideo && AlertAVI.SaveEnabled)
+            {
+                AlertAVI.BuildArray(e.OriginalBitmap);
+            }
+            else if (!AlertAVI.SaveVideo && !AlertAVI.SaveEnabled)
+            {
+                ArmButton.Background = System.Windows.Media.Brushes.Blue;
+            }
+
+            if(AlertAVI.SaveVideo && !AlertAVI.SaveEnabled)
+            {
+                AlertAVI.SaveVideo = false; //User wasnt ready, must reset
+            }
 
             if (e.Faces == null) //if Faces is null, face is lost, reset timer
             {
@@ -383,8 +395,9 @@ namespace Sacknet.KinectFacialRecognitionDemo
         private void ArmButton_Click(object sender, RoutedEventArgs e)
         {
             ArmButton.Background = System.Windows.Media.Brushes.Red;
+            AlertAVI.ReArm();
             AlertAVI.filePath = VideoPath.Text;
-            AlertAVI.SaveEnabled = true;
+            AlertAVI.SaveEnabled = true; //User wants to save a video
             MessageBox.Show("Video File Path set to " + VideoPath.Text);
         }
 
