@@ -278,7 +278,7 @@ namespace Sacknet.KinectFacialRecognitionDemo
                 {
                     cmd.Parameters.AddWithValue("@Uid", Guid.NewGuid());
                     cmd.Parameters.AddWithValue("@Name", this.NameField.Text);
-                    cmd.Parameters.AddWithValue("@Phone_number", "222");
+                    cmd.Parameters.AddWithValue("@Phone_number", "UNKNOWN");
                     cmd.Parameters.AddWithValue("@FaceFront", saveStream.ToArray());
                     //cmd.Parameters.AddWithValue("@ColorImage", saveStream.ToArray());
                     cmd.Parameters.AddWithValue("@Restriction_type", 2);

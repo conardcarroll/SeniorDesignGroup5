@@ -8,8 +8,8 @@
 
         <Button x:Name="LoadButton" Content="Load" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,6,0,0" Click="LoadFaces" />
         <Button x:Name="ArmButton" Content="ARM" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="541,0,0,68" Click="ArmButton_Click"/>
-        <TextBox x:Name="NameField"  Height="25" Width="204" HorizontalAlignment="Left" VerticalAlignment="Top" Text="Face 1" Margin="25,578,0,0" />
-        <TextBox x:Name="VideoPath"  Height="25" Width="204" HorizontalAlignment="Right" VerticalAlignment="Top" Text="C:/Users/Kelly/Desktop/" Margin="0,593,223.333,0" />
+        <TextBox x:Name="NameField"  Height="25" Width="204" HorizontalAlignment="Left" VerticalAlignment="Top" Text="UNKNOWN 1" Margin="25,578,0,0" />
+        <TextBox x:Name="VideoPath"  Height="25" Width="204" HorizontalAlignment="Right" VerticalAlignment="Top" Text="C:/Users/Jason/Desktop/" Margin="0,593,223.333,0" />
         <TextBox x:Name="EmailBox"  Height="25" Width="204" HorizontalAlignment="Right" VerticalAlignment="Bottom" Text="sheetsjf@mail.uc.edu" Margin="0,0,223.333,36" />
         <Button x:Name="TrainButton" Click="Train" Content="Train!" Height="24" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="246,579,0,0" />
         <ItemsControl x:Name="TrainedFaces" Margin="679,35,-24,-35">
